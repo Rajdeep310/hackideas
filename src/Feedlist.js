@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import fire from './Firebase'
 import './App.css';
 
+import Upvote from './Upvote'
+
 
 const sortOptions = {
     'vote': { column: 'vote' },
@@ -12,6 +14,7 @@ function Feedlist() {
 
     const [feeds, setFeeds] = useState([]);
     const [sortBy, setSortBy] = useState('vote');
+    // Fetching all the records from firestore
     useEffect(() => {
         const unsubscribe = fire
             .firestore()
@@ -26,7 +29,7 @@ function Feedlist() {
                 setTime(newFeeds)
             })
         return () => unsubscribe();
-    }, [sortBy])
+    }, [sortBy]) // fetching new data everytime user changes sort condition 
 
 
 
@@ -54,6 +57,9 @@ function Feedlist() {
                             <div className='feed-desc'>Description: <span className='feed-details'>{!feed.disc ? (feed.desc)  : 'None'}</span></div>
                             <div className='feed-feature'>Feature: <span className='feed-details'>{feed.feature}</span></div>
                             <div className='feed-vote'> Votes: <span className='feed-details'>{feed.vote}</span></div>
+
+                            {/* Upvote component for upvoting the specific challenge */}
+                            <Upvote id={feed.id} vote={feed.vote} />
                         </div>
 
                     )
